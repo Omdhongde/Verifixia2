@@ -1,0 +1,49 @@
+# Training configuration for Deepfake Detection – EfficientNet Video Model
+
+# Dataset settings
+dataset_type: "video"  # Options: "video" or "image"
+use_huggingface_dataset: false
+train_data_path: "../../DATA"
+val_data_path: "../../DATA"
+
+# Video extraction settings (for video dataset_type)
+frames_per_video: 8  # Reduced from 16 for CPU memory efficiency
+video_extensions: ['.mp4', '.avi', '.mov', '.mkv', '.webm']
+
+# Model settings
+model_type: "efficientnet_b0"  # Options: "efficientnet_b0", "efficientnet_b4"
+model_save_path: "../../models/efficientnet_b0_video.pth"
+pretrained: true  # Use ImageNet pretrained weights
+
+# Training hyperparameters
+batch_size: 4  # Reduced for CPU memory constraints
+learning_rate: 0.001
+weight_decay: 1e-4
+num_epochs: 50
+warmup_epochs: 2
+
+# Data augmentation settings
+augmentation:
+  random_horizontal_flip: true
+  random_vertical_flip: false
+  random_rotation: 15
+  color_jitter: true
+  color_brightness: 0.2
+  color_contrast: 0.2
+  color_saturation: 0.2
+  color_hue: 0.1
+  gaussian_blur: false
+  resize: 224  # Reduced from 384 for CPU memory efficiency
+  normalize_mean: [0.485, 0.456, 0.406]
+  normalize_std: [0.229, 0.224, 0.225]
+
+# Optimization
+optimizer: "adamw"
+scheduler: "cosine"  # Options: "step", "cosine", "linear"
+num_workers: 0  # Set to 0 for CPU/Windows to avoid multiprocessing issues
+
+# Logging and checkpointing
+checkpoint_dir: "../../checkpoints"
+log_dir: "../../logs"
+save_frequency: 1  # Save checkpoint every N epochs
+early_stopping_patience: 5
